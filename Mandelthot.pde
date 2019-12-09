@@ -1,10 +1,10 @@
 double RealSize = 0;
 double ComplexSize = 0;
-double BaseReal = 4.5;
-double BaseComplex = 5;
+double BaseReal = 6;
+double BaseComplex = 3;
 double YOffset;
 double XOffset;
-int MaxIterations = 1000;
+int MaxIterations = 10000;
 float BailOut = 15;
 double ZoomAmount = .35;
 double MoveAmount = .13;
@@ -35,7 +35,7 @@ int GetColor(Complex c)
     Z = new Complex((Z.x * Z.x) - (Z.y * Z.y), 2 * (Z.x * Z.y));
     Iterations++;
   }
-  Col = (float) Iterations / (float) MaxIterations;
+  Col = ((float) Iterations / (float) MaxIterations);
   if (Col == 1)
   {
     return(color(0));
@@ -53,8 +53,8 @@ Complex GetComplexAtPoint(int x, int y)
 
 void setup()
 {
-  //size (4950, 3825);
-  size (1000, 1000);
+  //size (3840, 2160);
+  size (480, 360);
   String[] Coords = loadStrings("Coords.txt");
   RealSize = Double.valueOf(Coords[0]);
   ComplexSize = Double.valueOf(Coords[1]);
@@ -151,6 +151,7 @@ void MandelDraw()
           rectMode(CENTER);
           noStroke();
           fill(GetColor(GetComplexAtPoint(x, y)));
+          //point(x,y);
           rect(x, y, PixelSkip, PixelSkip);
         }
         //println((float)(x * height) / (width * height));
