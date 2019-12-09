@@ -1,15 +1,21 @@
-double RealSize = 0;
-double ComplexSize = 0;
-double BaseReal = 4.5;
-double BaseComplex = 5;
+
+
+double RealSize = 6;
+double ComplexSize = 2;
+double BaseReal = 6;
+double BaseComplex = 3;
 double YOffset;
 double XOffset;
-int MaxIterations = 1000;
+int BaseMaxIterations = 100;
+int MaxIterations = 3000;
 float BailOut = 15;
+color[] Colors = {255, #FF0009, #00FFDB , #3D33B9, #1603FF, #FF00EF, #FF03AB, #00FFF9, #FC7200, 0
+};
 double ZoomAmount = .35;
 double MoveAmount = .13;
-int PixelSkip = 100; // 1 = no skips, 2 = every other pixel, ect..
+int PixelSkip = 10; // 1 = no skips, 2 = every other pixel, ect..
 float ColorOffset;
+int AutoSetMaxIterations = 0;
 
 class Complex
 {
@@ -42,7 +48,7 @@ int GetColor(Complex c)
   }
   else
   {
-  return(color((Col * 255.0 + ColorOffset), 255, 200));
+  return(color(255 - (Col * 255.0 + ColorOffset), 255, 200));
   }
 }
 
@@ -54,7 +60,7 @@ Complex GetComplexAtPoint(int x, int y)
 void setup()
 {
   //size (4950, 3825);
-  size (1000, 1000);
+  size (1800, 950);
   String[] Coords = loadStrings("Coords.txt");
   RealSize = Double.valueOf(Coords[0]);
   ComplexSize = Double.valueOf(Coords[1]);
@@ -91,13 +97,21 @@ void keyPressed()
   else if (key == '=')
   {
     RealSize -= ZoomAmount * RealSize;
-    ComplexSize -= ZoomAmount * ComplexSize;
+    ComplexSize = RealSize * .5;
+    if (AutoSetMaxIterations == 1)
+    {
+    SetMaxIterations();
+    }
     println ("Zoomed to : " + RealSize + " , " + ComplexSize);
   } 
   else if (key == '-')
   {
     RealSize += ZoomAmount * RealSize;
-    ComplexSize += ZoomAmount * ComplexSize;
+    ComplexSize = RealSize * .5;
+    if (AutoSetMaxIterations == 1)
+    {
+    SetMaxIterations();
+    }
     println ("Zoomed to : " + RealSize + " , " + ComplexSize);
   } 
   else if(key == 'r')
@@ -123,7 +137,6 @@ void keyPressed()
   else if (key == 's')
   {
     save("Output.png"); 
-    return;
   }
   else
   {
@@ -158,4 +171,9 @@ void MandelDraw()
     }
   }
   println("Finished");
+}
+
+void SetMaxIterations()
+{
+  MaxIterations = (int)((double)((BaseReal * BaseReal) + (BaseComplex * BaseComplex)) / ((RealSize * RealSize) + (ComplexSize * ComplexSize)) * BaseMaxIterations);
 }
